@@ -1,10 +1,11 @@
 # 💳 Credit Score Classification & Regression
 
-신용등급(Good/Standard/Bad)을 예측하는 머신러닝 분류 프로젝트
+신용정보 데이터셋을 이용한 신용점수 Classification과 연체일수 Regression
 
 ---
 
 ## 🏗️ 프로젝트 구조
+
 ```
 📁 credit-score-classification/
 ├── 📁 data/
@@ -15,7 +16,7 @@
 │       └── best_lr_model.pkl         # Logistic Regression
 ├── 📁 notebooks/
 │   ├── 📁 01_eda/
-│   │   └── eda.ipynb                 
+│   │   └── eda.ipynb
 │   ├── 📁 02_classification/
 │   │   ├── random_forest.ipynb
 │   │   ├── xgboost.ipynb
@@ -44,39 +45,44 @@
 
 개인 고객의 금융 데이터를 기반으로 신용 점수를 세 단계(Good/Standard/Bad)로 분류하여 고객의 연체 위험을 정량적으로 평가한다. 이를 통해 금융기관은 대출 승인 여부와 한도를 보다 합리적으로 결정할 수 있다.
 
-| 항목 | 내용 |
-|------|------|
-| **목표** | 고객 데이터 기반 신용등급 3-class 분류 |
-| **데이터** | 96,696개 샘플, 24개 피처 |
-| **타겟** | 0: Bad, 1: Standard, 2: Good |
+| 항목       | 내용                                   |
+| ---------- | -------------------------------------- |
+| **목표**   | 고객 데이터 기반 신용등급 3-class 분류 |
+| **데이터** | 96,696개 샘플, 24개 피처               |
+| **타겟**   | 0: Bad, 1: Standard, 2: Good           |
 
 ---
 
 ## 🤖 사용 모델
 
 ### 1. Logistic Regression
+
 - 선형 분류 모델로 baseline 성능 확인
 - StandardScaler 적용 (필수)
 - L1/L2 정규화 및 Optuna 하이퍼파라미터 튜닝
 
 ### 2. Random Forest
+
 - 다수의 결정트리를 결합하여 변수 간 비선형 관계와 복잡한 상호작용 학습
 - 피처 엔지니어링 (12개 신규 피처 생성)
 - Feature Selection (상위 20개 피처)
 - Optuna 하이퍼파라미터 튜닝
 
 ### 3. XGBoost
+
 - 학습 과정에서 잔여 오차를 반복적으로 보정(Boosting)하여 예측 정확도 향상
 - 과적합(overfitting) 방지를 위한 정규화 적용
 - Optuna 하이퍼파라미터 튜닝
 
 ### 4. FT-Transformer
+
 - 표형(tabular) 데이터에 특화된 Transformer 모델
 - 기존 트리 기반 모델이 포착하기 어려운 고차원적 피처 상호작용과 비선형 패턴 학습
 - 순수 PyTorch로 직접 구현
 - Label Smoothing, Cosine Annealing, Gradient Clipping 적용
 
 ### 5. Ensemble (Soft Voting)
+
 - RF + XGBoost + FT-Transformer 예측 확률 결합
 - 최적 가중치 자동 탐색
 
@@ -84,15 +90,16 @@
 
 ## 📊 성능 비교
 
-| Model | Accuracy | F1 Score (macro) |
-|-------|:--------:|:----------------:|
-| Logistic Regression | 0.6543 | 0.6489 |
-| Random Forest | 0.7967 | 0.7850 |
-| XGBoost | 0.8133 | 0.8062 |
-| FT-Transformer | 0.7347 | 0.7179 |
-| **🏆 Ensemble** | **0.8199** | **0.8131** |
+| Model               |  Accuracy  | F1 Score (macro) |
+| ------------------- | :--------: | :--------------: |
+| Logistic Regression |   0.6543   |      0.6489      |
+| Random Forest       |   0.7967   |      0.7850      |
+| XGBoost             |   0.8133   |      0.8062      |
+| FT-Transformer      |   0.7347   |      0.7179      |
+| **🏆 Ensemble**     | **0.8199** |    **0.8131**    |
 
 ### 결과 분석
+
 - **XGBoost**가 단일 모델 중 가장 높은 성능 (Acc: 81.33%)
 - **Ensemble**이 전체 최고 성능 달성 (Acc: 81.99%, F1: 81.31%)
 - **FT-Transformer**는 Tabular 데이터 특성상 트리 모델 대비 낮은 성능
@@ -102,26 +109,28 @@
 
 ## 🔧 성능 개선 기법
 
-| 기법 | 설명 | 적용 모델 |
-|------|------|----------|
-| 피처 엔지니어링 | 비율, 복합 피처 생성 (debt_to_income 등) | RF |
-| Feature Selection | 중요도 기반 상위 20개 피처 선택 | RF |
-| Optuna 튜닝 | 베이지안 최적화 기반 하이퍼파라미터 탐색 | All |
-| Label Smoothing | 과적합 방지, 일반화 성능 향상 | FT |
-| Cosine Annealing | 학습률 스케줄링 | FT |
-| Gradient Clipping | 학습 안정화 | FT |
-| Soft Voting | 예측 확률 가중 평균 앙상블 | Ensemble |
+| 기법              | 설명                                     | 적용 모델 |
+| ----------------- | ---------------------------------------- | --------- |
+| 피처 엔지니어링   | 비율, 복합 피처 생성 (debt_to_income 등) | RF        |
+| Feature Selection | 중요도 기반 상위 20개 피처 선택          | RF        |
+| Optuna 튜닝       | 베이지안 최적화 기반 하이퍼파라미터 탐색 | All       |
+| Label Smoothing   | 과적합 방지, 일반화 성능 향상            | FT        |
+| Cosine Annealing  | 학습률 스케줄링                          | FT        |
+| Gradient Clipping | 학습 안정화                              | FT        |
+| Soft Voting       | 예측 확률 가중 평균 앙상블               | Ensemble  |
 
 ---
 
 ## 🚀 실행 방법
 
 ### 환경 설정
+
 ```bash
 pip install pandas numpy scikit-learn xgboost torch optuna
 ```
 
 ### 1. 데이터 로드
+
 ```python
 import pickle
 
@@ -135,6 +144,7 @@ y_test = data_dict['y_test_clf']
 ```
 
 ### 2. 모델 로드 및 예측
+
 ```python
 # XGBoost 예시
 with open('models/01_classification/best_xgb_model.pkl', 'rb') as f:
@@ -145,6 +155,7 @@ predictions = model.predict(X_test)
 ```
 
 ### 3. FT-Transformer 로드
+
 ```python
 import torch
 
@@ -164,6 +175,7 @@ predictions = model(X_test_tensor).argmax(dim=1)
 ---
 
 ## 📦 Requirements
+
 ```
 pandas>=1.3.0
 numpy>=1.21.0
@@ -186,10 +198,7 @@ optuna>=3.0.0
 
 ## 👤 Author
 
-- GitHub: [@hayeon7898](https://github.com/hayeon7898)
+- GitHub: [@hayeon7898](https://github.com/hayeon7898) : EDA & Classification
+- GitHub: [@seoyuncho](https://github.com/seoyuncho) : EDA & Regression
 
 ---
-
-## 📄 License
-
-MIT License
