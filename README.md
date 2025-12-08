@@ -32,15 +32,17 @@
 │   └── preprocessed_data.pkl         # 전처리된 데이터
 ├── 📁 models/
 │   └── 📁 01_classification/
-│       ├── best_xgb_model.pkl        # XGBoost
-│       ├── best_lr_model.pkl         # Logistic Regression
-│       └── best_ft_model.pkl         # FT-Transformer
+│       └── best_lr_model.pkl         # Logistic Regression
 ├── 📁 notebooks/
 │   ├── random_forest.ipynb
 │   ├── xgboost.ipynb
 │   ├── ft_transformer.ipynb
 │   ├── logistic_regression.ipynb
 │   └── ensemble.ipynb
+|── 📁 reports/
+│   ├── 01_Proposal report.pdf
+│   ├── 02_Progress report.pdf
+│   └── 03_Final report.pdf
 └── README.md
 ```
 
